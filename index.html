@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>API</title>
+
+<!-- jQuery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</head>
+<body onLoad="allPost()">
+	<h2>All Post</h2>
+<div class="table-responsive">
+<table class="table table-hover table-bordered">
+	<thead>
+		<tr>
+		<td>#</td>
+		<td>Title</td>
+		<td>Content</td>
+		<td>Created at</td>
+		<td>Updated at</td>
+		<td>Action</td>
+		</tr>
+		<tr>
+			<td><form>
+				<input type="number" name="id "></td>
+			<td><input type="text" id="title" name="title"></td>
+			<td><input type="text" id="content" name="content"></td>
+			<td>
+				<button onClick="store()">OK</button>
+
+			</form></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody id="posts">
+
+	</tbody>
+	<tfoot>
+
+	</tfoot>
+</table>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js" integrity="sha512-otOZr2EcknK9a5aa3BbMR9XOjYKtxxscwyRHN6zmdXuRfJ5uApkHB7cz1laWk2g8RKLzV9qv/fl3RPwfCuoxHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+	// const getBtn = document.getElementById('get-btn');
+	// const postBtn = document.getElementById('post-btn');
+	// const getData  = () => {};
+	// const sendData  = () => {};
+	// getBtn.addEventListener('click', getData);
+	// postBtn.addEventListener('click', sendData);
+function allPost(){
+// axios.get(url[, config])	
+axios.get('http://localhost/API/Laravel/laravel/public/api/posts')
+.then(function(res){
+	//console.log(res.data);
+	res.data.forEach(x => {
+		//console.log(x);
+		document.getElementById('posts').innerHTML += 
+		'<tr>'
+			+'<td>'+x.id+'</td>'
+			+'<td>'+ x.title + '</td>'
+			+'<td>'+ x.content + '</td>'
+			+'<td>'+ x.created_at + '</td>'
+			+'<td>'+ x.updated_at + '</td>'
+			+'<td><form><input class="id" value="'+x.id+'"><button onClick="remove()">Del</button></form></td></tr>';
+	})
+})
+.catch(function(err){
+	console.log(err);
+})
+}
+
+function store(){
+  event.preventDefault();
+  const titleV = document.getElementById('title').value;
+  const componentV = document.getElementById('content').value;
+  //alert(titleV);
+// axios.post(url[, data[, config]])
+axios.post('http://localhost/API/Laravel/laravel/public/api/posts', {
+    title: titleV,
+    content: componentV
+  });
+  document.getElementById('title').value = '';
+  document.getElementById('content').value = '';
+  refresh: allPost();
+}
+function remove(){
+	event.preventDefault();
+	var idV = document.getElementsByClassName('id').value;
+	alert(idV);
+// axios.delete(url[, config])
+// axios.delete('http://localhost/API/Laravel/laravel/public/api/posts/',idV);
+}
+
+</script>
+
+</body>
+</html>
